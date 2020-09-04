@@ -13,7 +13,7 @@ from core.models import PermissionLevel
 
 class GiveawayPlugin(commands.Cog):
     """
-    Fai dei fantastici giveaway con questo ~~fantastico~~ plugin! 
+    Fai dei fantastici giveaway con questo ~~fantastico~~ plugin! (Plugin tradotto da RiccardoMurack.exe#0001)
     """
 
     def __init__(self, bot):
@@ -406,16 +406,16 @@ class GiveawayPlugin(commands.Cog):
 
         if not message.embeds or message.embeds[0] is None:
             await ctx.send(
-                "Il messaggio ricevuto non è un'embed, so it isn't related to a giveaway."
+                "Il messaggio ricevuto non è un'embed, Quindi questo non è legato ad un giveaway."
             )
             return
 
         embed = message.embeds[0]
-        embed.description = "The giveaway has been cancelled."
+        embed.description = "Il giveaway è stato cancellato."
         await message.edit(embed=embed)
         self.active_giveaways.pop(_id)
         await self._update_db()
-        await ctx.send("Cancelled!")
+        await ctx.send("Cancellato!")
         return
 
     async def _start_new_giveaway_thread(self, obj):
