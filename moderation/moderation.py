@@ -13,7 +13,7 @@ from core.models import PermissionLevel
 
 class ModerationPlugin(commands.Cog):
     """
-    Moderate ya server using modmail pog
+    Gestisci il tuo server con il miglior plugin al mondo! (plugin tradotto da [Italian Riky](https://github.com/Italian-Riky)
     """
 
     def __init__(self, bot):
@@ -25,7 +25,7 @@ class ModerationPlugin(commands.Cog):
     @checks.has_permissions(PermissionLevel.ADMIN)
     async def moderation(self, ctx: commands.Context):
         """
-        Settings and stuff
+        Impostazioni e utilità.
         """
         await ctx.send_help(ctx.command)
         return
@@ -34,14 +34,14 @@ class ModerationPlugin(commands.Cog):
     @checks.has_permissions(PermissionLevel.ADMIN)
     async def channel(self, ctx: commands.Context, channel: discord.TextChannel):
         """
-        Set the log channel for moderation actions.
+        Imposta il canale log per le azioni di moderazione.
         """
 
         await self.db.find_one_and_update(
             {"_id": "config"}, {"$set": {"channel": channel.id}}, upsert=True
         )
 
-        await ctx.send("Done!")
+        await ctx.send("Fatto!")
         return
 
     @commands.command(aliases=["banhammer"])
@@ -54,21 +54,21 @@ class ModerationPlugin(commands.Cog):
         *,
         reason: str = None,
     ):
-        """Ban one or more users.
-                Usage:
-                {prefix}ban @member 10 Advertising their own products
-                {prefix}ban @member1 @member2 @member3 Spamming
+        """Banna una o piu persone!
+                Uso:
+                {prefix}ban @member 10 Pubblicizzano i loro sever.
+                {prefix}ban @member1 @member2 @member3 Ascoltano auto blu.
                 """
 
         config = await self.db.find_one({"_id": "config"})
 
         if config is None:
-            return await ctx.send("There's no configured log channel.")
+            return await ctx.send("Non c'è nessun canale dei log configurato.")
         else:
             channel = ctx.guild.get_channel(int(config["channel"]))
 
         if channel is None:
-            await ctx.send("There is no configured log channel.")
+            await ctx.send("Non c'è nessun canale dei log configurato.")
             return
 
         try:
@@ -90,15 +90,15 @@ class ModerationPlugin(commands.Cog):
                 if reason:
                     embed.add_field(name="Reason", value=reason, inline=False)
 
-                await ctx.send(f"🚫 | {member} is banned!")
+                await ctx.send(f"🚫 | {member} è stato bannato!")
                 await channel.send(embed=embed)
 
         except discord.Forbidden:
-            await ctx.send("I don't have the proper permissions to ban people.")
+            await ctx.send("Non ho i permessi per bannare le persone.")
 
         except Exception as e:
             await ctx.send(
-                "An unexpected error occurred, please check the logs for more details."
+                "Errore, Controlla i log per maggiori informazioni."
             )
             logger.error(e)
             return
@@ -108,21 +108,21 @@ class ModerationPlugin(commands.Cog):
     async def kick(
         self, ctx, members: commands.Greedy[discord.Member], *, reason: str = None
     ):
-        """Kick one or more users.
+        """Kicka una o piu persone.
         Usage:
-        {prefix}kick @member Being rude
-        {prefix}kick @member1 @member2 @member3 Advertising
+        {prefix}kick @member Puzzano
+        {prefix}kick @member1 @member2 @member3 Regola n.3
         """
 
         config = await self.db.find_one({"_id": "config"})
 
         if config is None:
-            return await ctx.send("There's no configured log channel.")
+            return await ctx.send("Non c'è nessun canale dei log configurato.")
         else:
             channel = ctx.guild.get_channel(int(config["channel"]))
 
         if channel is None:
-            await ctx.send("There is no configured log channel.")
+            await ctx.send("Non c'è nessun canale dei log configurato.")
             return
 
         try:
@@ -130,26 +130,26 @@ class ModerationPlugin(commands.Cog):
                 await member.kick(reason=f"{reason if reason else None}")
                 embed = discord.Embed(
                     color=discord.Color.red(),
-                    title=f"{member} was kicked!",
+                    title=f"{member} è stato kickato!",
                     timestamp=datetime.datetime.utcnow(),
                 )
 
                 embed.add_field(
-                    name="Moderator", value=f"{ctx.author}", inline=False,
+                    name="Moderatore", value=f"{ctx.author}", inline=False,
                 )
 
                 if reason is not None:
                     embed.add_field(name="Reason", value=reason, inline=False)
 
-                await ctx.send(f"🦶 | {member} is kicked!")
+                await ctx.send(f"🦶 | {member} è stato kickato!")
                 await channel.send(embed=embed)
 
         except discord.Forbidden:
-            await ctx.send("I don't have the proper permissions to kick people.")
+            await ctx.send("Non ho i permessi per kickare gente.")
 
         except Exception as e:
             await ctx.send(
-                "An unexpected error occurred, please check the Heroku logs for more details."
+                "Piccolo errore, controlla i log di Heroku per maggiori informazioni."
             )
             logger.error(e)
             return
@@ -157,18 +157,18 @@ class ModerationPlugin(commands.Cog):
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def warn(self, ctx, member: discord.Member, *, reason: str):
-        """Warn a member.
+        """Warna un membro.
         Usage:
-        {prefix}warn @member Spoilers
+        {prefix}warn @member testù
         """
 
         if member.bot:
-            return await ctx.send("Bots can't be warned.")
+            return await ctx.send("Non puoi warnare i miei fratelli bots.")
 
         channel_config = await self.db.find_one({"_id": "config"})
 
         if channel_config is None:
-            return await ctx.send("There's no configured log channel.")
+            return await ctx.send("Non c'è nessun canale dei log configurato.")
         else:
             channel = ctx.guild.get_channel(int(channel_config["channel"]))
 
@@ -196,7 +196,7 @@ class ModerationPlugin(commands.Cog):
             {"_id": "warns"}, {"$set": {str(member.id): userw}}, upsert=True
         )
 
-        await ctx.send(f"Successfully warned **{member}**\n`{reason}`")
+        await ctx.send(f"Warnato con successo **{member}**\n`{reason}`")
 
         await channel.send(
             embed=await self.generateWarnEmbed(
@@ -209,18 +209,18 @@ class ModerationPlugin(commands.Cog):
     @commands.command()
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def pardon(self, ctx, member: discord.Member, *, reason: str):
-        """Remove all warnings of a  member.
+        """Rimuovi tutti i warn di una persona.
         Usage:
-        {prefix}pardon @member Nice guy
+        {prefix}pardon @member Bravo pampinoh.
         """
 
         if member.bot:
-            return await ctx.send("Bots can't be warned, so they can't be pardoned.")
+            return await ctx.send("I miei fratelli bots non possono essere warnati, quindi nemmeno perdonati.")
 
         channel_config = await self.db.find_one({"_id": "config"})
 
         if channel_config is None:
-            return await ctx.send("There's no configured log channel.")
+            return await ctx.send("Non c'è nessun canale dei log configurato.")
         else:
             channel = ctx.guild.get_channel(int(channel_config["channel"]))
 
@@ -235,16 +235,16 @@ class ModerationPlugin(commands.Cog):
         try:
             userwarns = config[str(member.id)]
         except KeyError:
-            return await ctx.send(f"{member} doesn't have any warnings.")
+            return await ctx.send(f"{member} è un bravo ragazzo, non ha nemmeno un warn.")
 
         if userwarns is None:
-            await ctx.send(f"{member} doesn't have any warnings.")
+            await ctx.send(f"{member} Non ha nemmeno un warn.")
 
         await self.db.find_one_and_update(
             {"_id": "warns"}, {"$set": {str(member.id): []}}
         )
 
-        await ctx.send(f"Successfully pardoned **{member}**\n`{reason}`")
+        await ctx.send(f"Il boss perdona tutti, questa volta ha perdonato **{member}**\n`{reason}`")
 
         embed = discord.Embed(color=discord.Color.blue())
 
