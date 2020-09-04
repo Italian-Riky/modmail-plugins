@@ -19,7 +19,7 @@ class Log:
         self, type: str, user: discord.User, mod: discord.User, *, reason: str
     ):
         if self.channel is None:
-            return f"No Log Channel has been setup for {self.guild.name}"
+            return f"Non è stato settato nessun canale di log per {self.guild.name}"
         else:
             embed = discord.Embed()
             embed.set_author(name=f"{type} | {user.name}#{user.discriminator}")
