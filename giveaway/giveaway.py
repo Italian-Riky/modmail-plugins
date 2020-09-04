@@ -13,7 +13,7 @@ from core.models import PermissionLevel
 
 class GiveawayPlugin(commands.Cog):
     """
-    Fai dei fantastici giveaway con questo ~~fantastico~~ plugin! (Plugin tradotto da RiccardoMurack.exe#0001)
+    Fai dei fantastici giveaway con questo ~~fantastico~~ plugin! (Plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))
     """
 
     def __init__(self, bot):
