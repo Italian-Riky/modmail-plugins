@@ -13,7 +13,7 @@ from core.models import PermissionLevel
 
 class ModerationPlugin(commands.Cog):
     """
-    Gestisci il tuo server con il miglior plugin al mondo! (plugin tradotto da [Italian Riky](https://github.com/Italian-Riky)
+    Gestisci il tuo server con il miglior plugin al mondo! (plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))
     """
 
     def __init__(self, bot):
