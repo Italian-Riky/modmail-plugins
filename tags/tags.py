@@ -44,8 +44,8 @@ class TagsPlugin(commands.Cog):
                 }
             )
             
-            await ctx.send
-                f":white_check_mark: | Il tag `{name}` è stato creato!"
+            await ctx.send(
+                    f":white_check_mark: | Il tag `{name}` è stato creato!"
             )
             return
 
