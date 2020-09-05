@@ -32,7 +32,7 @@ class TranslatePlugin(commands.Cog):
 
     @commands.command()
     async def translate(self, ctx, msgid: int):
-        """Translate a sent message or a modmail thread message into english."""
+        """Traduce un messaggio o un modmail in inglese."""
         try:
             msg = await ctx.channel.fetch_message(msgid)
             if not msg.embeds:
@@ -40,7 +40,7 @@ class TranslatePlugin(commands.Cog):
             elif msg.embeds and msg.embeds[0] is not None:
                 ms = msg.embeds[0].description
             else:
-                await ctx.send("Something wrong!")
+                await ctx.send("Ho riscontrato un Errore!")
                 return
             tmsg = self.translator.translate(ms)
             embed = discord.Embed()
@@ -48,13 +48,13 @@ class TranslatePlugin(commands.Cog):
             embed.description = tmsg.text
             await ctx.channel.send(embed=embed)
         except NotFound:
-            await ctx.send("The provided message Was not found.")
+            await ctx.send("Il messaggio non è stato trovato")
         except HTTPException:
-            await ctx.send("Failed to retrieve the message.")
+            await ctx.send("Non sono riuscito a trovare il messaggio")
 
     @commands.command(aliases=["tt"])
     async def translatetext(self, ctx, *, message):
-        """Translates a provided message into english"""
+        """Traduce un testo in inglese."""
         tmsg = self.translator.translate(message)
         embed = discord.Embed()
         embed.color = 4388013
@@ -64,9 +64,9 @@ class TranslatePlugin(commands.Cog):
     @commands.command(aliases=["att"])
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     async def auto_translate_thread(self, ctx):
-        """Turn on auto translations for the ongoing thread."""
+        """Abilita la funzione di auto-traducere i ModMail."""
         if "User ID:" not in ctx.channel.topic:
-            await ctx.send("The channel is not a modmail thread")
+            await ctx.send("Questo canale non è un canale ModMail")
             return
         if ctx.channel.id in self.tt:
             self.tt.remove(ctx.channel.id)
@@ -86,7 +86,7 @@ class TranslatePlugin(commands.Cog):
     @commands.command(aliases=["tat"])
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def toggle_auto_translations(self, ctx, enabled: bool):
-        """Enable/Disable automatic translations"""
+        """Abilita/Disabilita la funzione di auto-traducere ogni messaggio inviato"""
         self.enabled = enabled
         await self.db.update_one(
             {"_id": "config"}, {"$set": {"enabled": self.enabled}}, upsert=True
