@@ -43,7 +43,7 @@ class TagsPlugin(commands.Cog):
                     "uses": 0,
                 }
             )
-
+            
             await ctx.send
                 f":white_check_mark: | Il tag `{name}` è stato creato!"
             )
