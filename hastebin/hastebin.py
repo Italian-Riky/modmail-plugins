@@ -8,6 +8,10 @@ from aiohttp import ClientResponseError
 
 
 class HastebinCog(commands.Cog):
+    """
+    Carica il tuo testo su hastebin con questo plugin! (plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))
+    """
+
     def __init__(self, bot):
         self.bot = bot
 
