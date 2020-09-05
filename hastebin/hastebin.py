@@ -17,7 +17,7 @@ class HastebinCog(commands.Cog):
 
     @commands.command()
     async def hastebin(self, ctx, *, message):
-        """Carica il tuo testo su hastebin! (Plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))"""
+        """Carica il tuo testo su hastebin!"""
         haste_url = os.environ.get("HASTE_URL", "https://hasteb.in")
 
         try:
