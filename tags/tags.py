@@ -7,6 +7,9 @@ from core.models import PermissionLevel
 
 
 class TagsPlugin(commands.Cog):
+    """
+    Crea i tuoi fantastici tag per le tue fantastiche meme! (plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))
+    """
     def __init__(self, bot):
         self.bot: discord.Client = bot
         self.db = bot.plugin_db.get_partition(self)
@@ -16,17 +19,17 @@ class TagsPlugin(commands.Cog):
     @checks.has_permissions(PermissionLevel.REGULAR)
     async def tags(self, ctx: commands.Context):
         """
-        Create Edit & Manage Tags
+        Crea, edita & Gestisci Tags.
         """
         await ctx.send_help(ctx.command)
 
     @tags.command()
     async def add(self, ctx: commands.Context, name: str, *, content: str):
         """
-        Make a new tag
+        Crea un nuovo tag.
         """
         if (await self.find_db(name=name)) is not None:
-            await ctx.send(f":x: | Tag with name `{name}` already exists!")
+            await ctx.send(f":x: | Un tag chiamato `{name}` Gia esiste!!")
             return
         else:
             ctx.message.content = content
@@ -41,22 +44,22 @@ class TagsPlugin(commands.Cog):
                 }
             )
 
-            await ctx.send(
-                f":white_check_mark: | Tag with name `{name}` has been successfully created!"
+            await ctx.send
+                f":white_check_mark: | Il tag `{name}` è stato creato!"
             )
             return
 
     @tags.command()
     async def edit(self, ctx: commands.Context, name: str, *, content: str):
         """
-        Edit an existing tag
+        Modifica un tag gia esistente!
 
-        Only owner of tag or user with Manage Server permissions can use this command
+        Solo l'owner del tag e i membri con il permesso di gestire il server possono usare questo comando.
         """
         tag = await self.find_db(name=name)
 
         if tag is None:
-            await ctx.send(f":x: | Tag with name `{name}` dose'nt exist")
+            await ctx.send(f":x: | Un tag chiamato `{name}` Non esiste")
             return
         else:
             member: discord.Member = ctx.author
@@ -67,21 +70,21 @@ class TagsPlugin(commands.Cog):
                 )
 
                 await ctx.send(
-                    f":white_check_mark: | Tag `{name}` is updated successfully!"
+                    f":white_check_mark: | Il tag `{name}` è stato aggiornato correttamente!"
                 )
             else:
-                await ctx.send("You don't have enough permissions to edit that tag")
+                await ctx.send("Non hai il permesso di modificare questo tag.")
 
     @tags.command()
     async def delete(self, ctx: commands.Context, name: str):
         """
-        Delete a tag.
+        Elimina un tag.
 
-        Only owner of tag or user with Manage Server permissions can use this command
+        Solo il proprietario del tag o i membri con il permesso di Gestire il Server possono usare questo comando.
         """
         tag = await self.find_db(name=name)
         if tag is None:
-            await ctx.send(":x: | Tag `{name}` not found in the database.")
+            await ctx.send(":x: | Il Tag `{name}` Non è stato trovato nel database, prova un'altro nome.")
         else:
             if (
                 ctx.author.id == tag["author"]
@@ -90,25 +93,25 @@ class TagsPlugin(commands.Cog):
                 await self.db.delete_one({"name": name})
 
                 await ctx.send(
-                    f":white_check_mark: | Tag `{name}` has been deleted successfully!"
+                    f":white_check_mark: | Il Tag `{name}` è stato eliminato con successo!"
                 )
             else:
-                await ctx.send("You don't have enough permissions to delete that tag")
+                await ctx.send("Non hai il permesso di eliminare questo tag")
 
     @tags.command()
     async def claim(self, ctx: commands.Context, name: str):
         """
-        Claim a tag if the user has left the server
+        Reclama un tag quando il proprietario esce dal server!
         """
         tag = await self.find_db(name=name)
 
         if tag is None:
-            await ctx.send(":x: | Tag `{name}` not found.")
+            await ctx.send(":x: | Il tag `{name}` Non è stato trovato.")
         else:
             member = await ctx.guild.get_member(tag["author"])
             if member is not None:
                 await ctx.send(
-                    f":x: | The owner of the tag is still in the server `{member.name}#{member.discriminator}`"
+                    f":x: | Il proprietario del tag è ancora nel server! `{member.name}#{member.discriminator}`"
                 )
                 return
             else:
@@ -118,42 +121,42 @@ class TagsPlugin(commands.Cog):
                 )
 
                 await ctx.send(
-                    f":white_check_mark: | Tag `{name}` is now owned by `{ctx.author.name}#{ctx.author.discriminator}`"
+                    f":white_check_mark: | Il tag `{name}` è ora di `{ctx.author.name}#{ctx.author.discriminator}`"
                 )
 
     @tags.command()
     async def info(self, ctx: commands.Context, name: str):
         """
-        Get info on a tag
+        Raccogli informazioni su un tag.
         """
         tag = await self.find_db(name=name)
 
         if tag is None:
-            await ctx.send(":x: | Tag `{name}` not found.")
+            await ctx.send(":x: | Il tag `{name}` Non è stato trovato.")
         else:
             user: discord.User = await self.bot.fetch_user(tag["author"])
             embed = discord.Embed()
             embed.colour = discord.Colour.green()
-            embed.title = f"{name}'s Info"
+            embed.title = f"Info sul tag{name}"
             embed.add_field(
-                name="Created By", value=f"{user.name}#{user.discriminator}"
+                name="Creato da", value=f"{user.name}#{user.discriminator}"
             )
-            embed.add_field(name="Created At", value=tag["createdAt"])
+            embed.add_field(name="Creato il", value=tag["createdAt"])
             embed.add_field(
-                name="Last Modified At", value=tag["updatedAt"], inline=False
+                name="Ultima modifica", value=tag["updatedAt"], inline=False
             )
-            embed.add_field(name="Uses", value=tag["uses"], inline=False)
+            embed.add_field(name="Usi", value=tag["uses"], inline=False)
             await ctx.send(embed=embed)
             return
 
     @commands.command()
     async def tag(self, ctx: commands.Context, name: str):
         """
-        Use a tag!
+        Usa un tag!
         """
         tag = await self.find_db(name=name)
         if tag is None:
-            await ctx.send(f":x: | Tag {name} not found.")
+            await ctx.send(f":x: | il tag {name} Non è stato trovato.")
             return
         else:
             await ctx.send(tag["content"])
