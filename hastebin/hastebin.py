@@ -13,7 +13,7 @@ class HastebinCog(commands.Cog):
 
     @commands.command()
     async def hastebin(self, ctx, *, message):
-        """Upload text to hastebin"""
+        """Carica il tuo testo su hastebin! (Plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))"""
         haste_url = os.environ.get("HASTE_URL", "https://hasteb.in")
 
         try:
@@ -22,15 +22,15 @@ class HastebinCog(commands.Cog):
             ) as resp:
                 key = (await resp.json())["key"]
                 embed = Embed(
-                    title="Your uploaded file",
+                    title="Il tuo file hastebin",
                     color=self.bot.main_color,
                     description=f"{haste_url}/" + key,
                 )
         except (JSONDecodeError, ClientResponseError, IndexError):
             embed = Embed(
                 color=self.bot.main_color,
-                description="Something went wrong. "
-                "We're unable to upload your text to hastebin.",
+                description="Bip, Bup, Qualcosa è andato storto. "
+                "è impossibile caricare il tuo testo su hastebin.",
             )
             embed.set_footer(text="Hastebin Plugin")
         await ctx.send(embed=embed)
@@ -41,7 +41,7 @@ class HastebinCog(commands.Cog):
             "https://counter.modmail-plugins.piyush.codes/api/instances/hastebin",
             json={"id": self.bot.user.id},
         ):
-            print("Posted to Plugin API")
+            print("Caricato sull'API del plugin")
 
 
 def setup(bot):
