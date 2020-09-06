@@ -11,6 +11,9 @@ from googletrans import Translator
 
 
 class TranslatePlugin(commands.Cog):
+            """
+            Traduci i messaggi nel tuo server con un semplicissimo comando! (Plugin tradotto da [th3atom](https://github.com/th3atom-bot) per [Italian Riky](https://github.com/Italian-Riky).) 
+            """
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.plugin_db.get_partition(self)
@@ -64,7 +67,7 @@ class TranslatePlugin(commands.Cog):
     @commands.command(aliases=["att"])
     @checks.has_permissions(PermissionLevel.SUPPORTER)
     async def auto_translate_thread(self, ctx):
-        """Abilita la funzione di auto-traducere i ModMail."""
+        """Abilita la funzione di auto-tradurre i thread ModMail."""
         if "User ID:" not in ctx.channel.topic:
             await ctx.send("Questo canale non è un canale ModMail")
             return
@@ -86,7 +89,7 @@ class TranslatePlugin(commands.Cog):
     @commands.command(aliases=["tat"])
     @checks.has_permissions(PermissionLevel.MODERATOR)
     async def toggle_auto_translations(self, ctx, enabled: bool):
-        """Abilita/Disabilita la funzione di auto-traducere ogni messaggio inviato"""
+        """Abilita/Disabilita la funzione di auto-tradurre ogni messaggio inviato"""
         self.enabled = enabled
         await self.db.update_one(
             {"_id": "config"}, {"$set": {"enabled": self.enabled}}, upsert=True
