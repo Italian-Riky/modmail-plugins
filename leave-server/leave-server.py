@@ -10,14 +10,14 @@ class LeaveGuildPlugin(commands.Cog):
     @commands.is_owner()
     async def leaveguild(self, ctx, guild_id: int):
         """
-            Force your bot to leave a specified server
+            Forza il tuo bot a uscire da un server. (Plugin tradotto da [Italian-Riky](https://github.com/Italian-Riky).)
         """
         try:
             await self.bot.get_guild(guild_id).leave()
-            await ctx.send("Left!")
+            await ctx.send("Uscito!")
             return
         except:
-            await ctx.send("Error!")
+            await ctx.send("Errore!")
             return
 
     @commands.Cog.listener()
@@ -26,7 +26,7 @@ class LeaveGuildPlugin(commands.Cog):
             "https://counter.modmail-plugins.piyush.codes/api/instances/leaveserver",
             json={"id": self.bot.user.id},
         ):
-            print("Posted to Plugin API")
+            print("Postato sull'API del plugin.")
 
 
 def setup(bot):
