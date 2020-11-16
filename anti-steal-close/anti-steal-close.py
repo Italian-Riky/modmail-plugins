@@ -9,7 +9,7 @@ from core import checks
 
 class AntiStealClosePlugin(commands.Cog):
     """
-    An initiative to stop people stealing thread closes kthx.
+    Un'iniziativa per impedire alla gente di rubare i thread chiusi.(Plugin tradotto da [Italian Riky](https://github.com/Italian-Riky))
     """
     def __init__(self, bot):
         self.bot = bot
@@ -19,14 +19,10 @@ class AntiStealClosePlugin(commands.Cog):
     @checks.thread_only()
     async def anti_steal_close(self, ctx, user: discord.User, *, after: UserFriendlyTime = None):
         """
-        Close the thread on the behalf of another user.
+        Chiudi il thread per conto di un altro utente.
 
-        **Usage:**
-        [p]asc <user> <regular options that you pass into the close command>
-
-        **Examples:**
-        [p]asc 365644930556755969 Closed Due to Inactivity
-        [p]asc @Piyush#4332 in 24 hours Cya
+        **Usa:**
+        [p]asc <persona> <opzioni regolari che passi al comando close>
         """
         thread = ctx.thread
 
@@ -43,12 +39,12 @@ class AntiStealClosePlugin(commands.Cog):
                 await thread.cancel_closure(all=True)
                 embed = discord.Embed(
                     color=self.bot.error_color,
-                    description="Scheduled close has been cancelled.",
+                    description="La chiusura automatica è stata cancellata.",
                 )
             else:
                 embed = discord.Embed(
                     color=self.bot.error_color,
-                    description="This thread has not already been scheduled to close.",
+                    description="La chiusura di questo thread non è già stata pianificata.",
                 )
 
             return await ctx.send(embed=embed)
@@ -57,7 +53,7 @@ class AntiStealClosePlugin(commands.Cog):
             await self.send_scheduled_close_message(ctx, after, silent)
 
         dupe_message = ctx.message
-        dupe_message.content = f"[Anti Close Steal] The thread close command was invoked by {ctx.author.name}#{ctx.author.discriminator}"
+        dupe_message.content = f"[Anti Close Steal] Il comando di chiusura del thread è stato richiamato da {ctx.author.name}#{ctx.author.discriminator}"
 
         await thread.note(dupe_message)
 
@@ -71,8 +67,8 @@ class AntiStealClosePlugin(commands.Cog):
         silent = "*silently* " if silent else ""
 
         embed = discord.Embed(
-            title="Scheduled close",
-            description=f"This thread will close {silent}in {human_delta}.",
+            title="Chiusura automatica",
+            description=f"Questo thread si chiuderà {silent}in {human_delta}.",
             color=self.bot.error_color,
         )
 
@@ -80,7 +76,7 @@ class AntiStealClosePlugin(commands.Cog):
             embed.add_field(name="Message", value=after.arg)
 
         embed.set_footer(
-            text="Closing will be cancelled " "if a thread message is sent."
+            text="La chiusura sarà annullata " "se viene inviato un messaggio di thread."
         )
         embed.timestamp = after.dt
 
@@ -94,7 +90,7 @@ class AntiStealClosePlugin(commands.Cog):
             embed = discord.Embed(
                 color=self.bot.main_color
             )
-            embed.description = f"Thread closed by {ctx.author.name}#{ctx.author.discriminator} on the behalf of {user.username}#{user.discriminator} "
+            embed.description = f"Thread chiuso da {ctx.author.name}#{ctx.author.discriminator} per conto di {user.username}#{user.discriminator} "
 
             await channel.send(embed)
 
